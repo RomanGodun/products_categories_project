@@ -65,35 +65,3 @@ logger = get_logger(
 )
 
 
-def logger_dec(func_info: str) -> callable:
-    """
-    Add start/finish logging to function\n
-    Parameters
-    ----------
-    func_info : str
-        string which will be displayed in the logs. For example "finish {func_info}"
-    """
-
-    def decorator(func: callable) -> callable:
-        @wraps(func)
-        async def wrapper(*args, **kwargs):
-            # get real file and line what was called
-            file = "/".join(traceback.extract_stack()[-2].filename.split("/")[-2:])
-            function_name = func.__name__
-            line = traceback.extract_stack()[-2].lineno
-            
-            patched_logger = logger.patch(lambda r: r.update(function=function_name, name=file, line=line))
-
-            start_time = datetime.now()
-            
-            patched_logger.info(f"start {func_info}")
-
-            res = await func(*args, **kwargs)
-
-            patched_logger.info(f"finish {func_info} ({datetime.now() - start_time})")
-
-            return res
-
-        return wrapper
-
-    return decorator

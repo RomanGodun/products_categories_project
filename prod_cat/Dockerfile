@@ -24,4 +24,4 @@ COPY app app
 COPY setup.py setup.py
 RUN pip install -e .
 
-CMD ["uvicorn", "app.main:app","--host","0.0.0.0"]
+CMD ["uvicorn", "app.api.main:app","--host","0.0.0.0"]
