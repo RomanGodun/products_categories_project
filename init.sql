@@ -1,23 +1,30 @@
-CREATE TABLE IF NOT EXISTS products
+CREATE TABLE IF NOT EXISTS product
 (
     id SERIAL PRIMARY KEY,
-    product_name CHARACTER VARYING(100) NOT NULL
+    create_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    edit_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    product_name CHARACTER VARYING(100) UNIQUE NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS categories
+CREATE TABLE IF NOT EXISTS category
 (
     id SERIAL PRIMARY KEY,
-    category_name CHARACTER VARYING(100) NOT NULL
+    create_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    edit_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    category_name CHARACTER VARYING(100) UNIQUE NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS products_categories
+CREATE TABLE IF NOT EXISTS product_to_category
 (
-    id SERIAL PRIMARY KEY,
-    product_id integer REFERENCES products (id) NOT NULL,
-    category_id integer REFERENCES categories (id) NOT NULL
+    id SERIAL,
+    create_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    edit_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    product_id INTEGER REFERENCES product (id),
+    category_id INTEGER REFERENCES category (id),
+    PRIMARY KEY (product_id, category_id)
 );
 
-INSERT INTO products (product_name)
+INSERT INTO product (product_name)
 VALUES
 ('product_1'),
 ('product_2'),
@@ -29,14 +36,14 @@ VALUES
 ('product_8'),
 ('product_9');
 
-INSERT INTO categories (category_name)
+INSERT INTO category (category_name)
 VALUES
 ('category_1'),
 ('category_2'),
 ('category_3'),
 ('category_4');
 
-INSERT INTO products_categories (product_id, category_id)
+INSERT INTO product_to_category (product_id, category_id)
 VALUES
 (1,1),
 (3,1),
