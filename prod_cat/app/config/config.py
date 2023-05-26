@@ -59,9 +59,9 @@ def get_logger(
 env_dict = get_env_dict(Path(__file__).parents[0])
 db_url = get_db_url(env_dict)
 logger = get_logger(
-    logging_level=env_dict.get("LOGGING_LEVEL", "INFO"),
+    logging_level=env_dict.get("LOGGING_LEVEL"),
     log_dir=Path(env_dict.get("LOG_DIR", None)),
-    logging_dir_level=env_dict.get("LOGGING_DIR_LEVEL", "DEBUG"),
+    logging_dir_level=env_dict.get("LOGGING_DIR_LEVEL"),
 )
 
 

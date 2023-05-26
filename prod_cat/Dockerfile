@@ -5,9 +5,9 @@ COPY ./requirements/requirements.txt ./requirements/requirements.txt
 RUN pip install -r requirements/requirements.txt
 
 #std.err log level
-ARG LOGGING_LEVEL="INFO"
+ARG LOGGING_LEVEL="DEBUG"
 #file log level
-ARG LOGGING_DIR_LEVEL="INFO"
+ARG LOGGING_DIR_LEVEL="DEBUG"
 #folder for file logs
 ARG LOG_DIR="logs"
 ARG TZ=Europe/Moscow
