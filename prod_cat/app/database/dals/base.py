@@ -1,17 +1,8 @@
-from typing import Union 
-from uuid import UUID
-
-from sqlalchemy import and_
-from sqlalchemy import select
-from sqlalchemy import update
-from sqlalchemy.ext.asyncio import AsyncSession
-
-from app.database.models.base import Base
-from prod_cat.app.database.models.buisiness_entitiyes import Product
 from enum import Enum, auto
 
-from sqlalchemy.ext.asyncio import AsyncSession
 from app.config.config import logger
+from sqlalchemy.ext.asyncio import AsyncSession
+
 
 class READ_TYPE(int, Enum):
     ONE_VALUE = auto()

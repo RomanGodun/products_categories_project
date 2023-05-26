@@ -1,8 +1,9 @@
-from app.database.session_utils import get_session
+from app.api.actions.business_funcs import (select_category_products_,
+                                            select_product_categories_,
+                                            select_product_category_pairs_)
 from app.api.schemas.business_funcs import (CategoriesSchema, ProductsSchema,
-                             ProductsToCategoriesSchema)
-from app.api.actions.business_funcs import select_product_categories_, select_category_products_ , select_product_category_pairs_, t_
-from app.database.session_utils import connect, disconnect, get_session
+                                            ProductsToCategoriesSchema)
+from app.database.session_utils import get_session
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 

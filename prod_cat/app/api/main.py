@@ -10,9 +10,7 @@ async def lifespan(app: FastAPI):
     yield
     disconnect()
 
- 
 app = FastAPI(lifespan=lifespan)
-
 
 # create the instance for the routes
 main_api_router = APIRouter()

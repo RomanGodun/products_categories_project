@@ -13,7 +13,7 @@ import uuid
 
 class Schemes(str, Enum):
     PUBLIC = "public"
-    PRODUCT_LOGIC = "public"
+    BUISINESS_ENTITIES = "buisiness_entities"
 
 
 class Base(AsyncAttrs, DeclarativeBase):
@@ -22,7 +22,6 @@ class Base(AsyncAttrs, DeclarativeBase):
         "schema": Schemes.PUBLIC.value,
         "extend_existing": True,
     }
-    
 
     @declared_attr.directive
     def __tablename__(cls) -> str:

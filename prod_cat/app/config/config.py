@@ -1,6 +1,7 @@
 import os
 import sys
 import traceback
+import pydantic
 from datetime import datetime, timedelta
 from functools import wraps
 from pathlib import Path
@@ -22,9 +23,19 @@ def get_env_dict(env_dir: Optional[Path]):
     return env_dict
 
 
-def get_db_url(env_dict: dict[str, Any]) -> str:
-    # postgres://YourUserName:YourPassword@YourHostname:5432/YourDatabaseName
-    return f"postgresql+asyncpg://{env_dict.get('DB_USER')}:{env_dict.get('DB_PASSWORD')}@{env_dict.get('DB_HOST')}:{env_dict.get('DB_PORT')}/{env_dict.get('DB_NAME')}"
+            
+def get_db_url(env_dict: dict[str, Any], is_asnc:bool = True) -> str:
+    
+    use_global = pydantic.parse_obj_as(bool, env_dict.get("USE_GLOBAL", "True"))
+    
+    prefix = "postgresql+asyncpg" if is_asnc else "postgresql"
+    user = env_dict.get('DB_USER')
+    password = env_dict.get('DB_PASSWORD')
+    host = env_dict.get('DB_HOST_GLOBAL') if use_global else env_dict.get('DB_HOST_LOCAL')
+    port = env_dict.get('DB_PORT')
+    db_name = env_dict.get('DB_NAME')
+    
+    return f"{prefix}://{user}:{password}@{host}:{port}/{db_name}"   
 
 
 class Rotator:
@@ -57,11 +68,14 @@ def get_logger(
 
 
 env_dict = get_env_dict(Path(__file__).parents[0])
+
 db_url = get_db_url(env_dict)
+db_url_alembic = get_db_url(env_dict, is_asnc=False)
+
 logger = get_logger(
-    logging_level=env_dict.get("LOGGING_LEVEL"),
-    log_dir=Path(env_dict.get("LOG_DIR", None)),
-    logging_dir_level=env_dict.get("LOGGING_DIR_LEVEL"),
+    logging_level=env_dict.get("LOGGING_LEVEL", "INFO"),
+    log_dir=Path(env_dict.get("LOG_DIR")) if env_dict.get("LOG_DIR") else None,
+    logging_dir_level=env_dict.get("LOGGING_DIR_LEVEL","DEBUG"),
 )
 
 
