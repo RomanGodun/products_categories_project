@@ -2,7 +2,7 @@ from typing import List
 
 from app.api.schemas.business_funcs import CategoriesSchema, ProductsSchema, ProductsToCategoriesSchema
 from app.config.config import logger
-from app.database.dals.base import READ_TYPE, BaseDAL
+from app.database.dals.base_dal import READ_TYPE, BaseDAL
 from app.database.models.buisiness_entities import Product, Category, ProductToCategory
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -14,7 +14,7 @@ async def select_product_categories_(session: AsyncSession) -> List[ProductsSche
                         Product.title.label("product"),
                         func.array_agg(
                         Category.title
-                        ).label("category")       
+                        ).label("categories")       
                 )
                 .join_from(Product, ProductToCategory)
                 .join(Category)
@@ -24,7 +24,7 @@ async def select_product_categories_(session: AsyncSession) -> List[ProductsSche
         
         products = await BaseDAL(session).read(sel, READ_TYPE.ALL)
         logger.debug(products)
-        return [ProductsSchema(product=p.product, categories=p.categories1) for p in products]
+        return [ProductsSchema(product=p.product, categories=p.categories) for p in products]
 
 
 

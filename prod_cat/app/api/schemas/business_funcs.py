@@ -1,4 +1,4 @@
-from app.api.schemas.base import TunedModel
+from app.api.schemas.base_tuned_model import TunedModel
         
 class ProductsSchema(TunedModel):
     product: str

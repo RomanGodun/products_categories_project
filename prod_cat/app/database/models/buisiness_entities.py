@@ -28,9 +28,8 @@ class Product(TimestampMixin, Base):
 
 class Category(TimestampMixin, Base):
     __table_args__ = {"schema": SCHEMA}
-    
     title: Mapped[str] = mapped_column(String(100),nullable=False, comment='Title of the category', index=True)
-    rars: Mapped[ENUM] = mapped_column(rars_t, comment='Title of the category')
+    rars: Mapped[ENUM] = mapped_column(rars_t,nullable=True, comment='Age constraint')
     
     products: Mapped[List[Product]] = relationship(secondary=f"{SCHEMA}.product_to_category", back_populates=f"categories")
 
