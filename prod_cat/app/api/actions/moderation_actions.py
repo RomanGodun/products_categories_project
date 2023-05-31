@@ -5,24 +5,14 @@ from app.api.schemas.moderation.base import (
     DeleteInstanceResp,
     UpdateInstanceResp,
 )
+from app.api.schemas.moderation.category import ShowCategoryResp, ShowCategoryRespWF
+from app.api.schemas.moderation.product import ShowProductResp, ShowProductRespWF
 from app.config.config import logger
 from app.database.dals.base_model_dal import BaseModelDAL
 from app.database.models.base import Base
+from app.database.models.buisiness_entities import Category, Product
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.config.config import logger
-from app.database.models.buisiness_entities import Category, Product
-from app.api.schemas.moderation.category import (
-    CreateCategoryRec,
-    ShowCategoryResp,
-    ShowCategoryRespWF,
-)
-
-from app.api.schemas.moderation.product import (
-    CreateProductRec,
-    ShowProductResp,
-    ShowProductRespWF,
-)
 
 MATCHING_MODELS_SHEMES = {
     Category: {"show_resp": ShowCategoryResp, "show_resp_wf": ShowCategoryRespWF},
@@ -40,9 +30,7 @@ class ModerationActions:
     async def create_(self, session: AsyncSession, instances: list[Base]) -> BaseModel:
         refreshed_instances = await BaseModelDAL(session, self.model).create(instances)
         logger.debug(refreshed_instances)
-        return CreateInstanceResp(
-            created_ids=[instance.id for instance in refreshed_instances]
-        )
+        return CreateInstanceResp(created_ids=[instance.id for instance in refreshed_instances])
 
     async def update_(self, session: AsyncSession, instances: list[Base]) -> BaseModel:
         resived_instances = await BaseModelDAL(session, self.model).update(instances)
@@ -66,9 +54,7 @@ class ModerationActions:
         done_ids = {instance.id for instance in resived_instances}
         failed_ids = set(uuids).difference(done_ids)
 
-        return DeleteInstanceResp(
-            deleted_ids=list(done_ids), not_found_ids=list(failed_ids)
-        )
+        return DeleteInstanceResp(deleted_ids=list(done_ids), not_found_ids=list(failed_ids))
 
     async def show_(self, session: AsyncSession, uuids: UUID) -> BaseModel:
         resived_instances = await BaseModelDAL(session, self.model).get(uuids)
@@ -78,9 +64,6 @@ class ModerationActions:
         failed_ids = set(uuids).difference(done_ids)
 
         return self.show_resp_wf(
-            instances=[
-                self.show_resp(**instance.as_dict(drop_base_fields=False))
-                for instance in resived_instances
-            ],
+            instances=[self.show_resp(**instance.as_dict(drop_base_fields=False)) for instance in resived_instances],
             not_found_ids=list(failed_ids),
         )
