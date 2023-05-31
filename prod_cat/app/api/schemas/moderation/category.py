@@ -1,10 +1,11 @@
 from app.api.schemas.moderation.base import (CreateInstanceRec,
-                                             GetInstanceByIdResp,
+                                             ShowInstanceResp,
                                              UpdateInstanceRec)
 from app.api.schemas.base_tuned_model import TunedModel
 from app.database.models.buisiness_entities import RARS
 from fastapi import HTTPException
 from pydantic import validator
+import uuid
 
 
 
@@ -31,8 +32,8 @@ class CreateCategoryRec(CreateInstanceRec):
 
    
 class UpdateCategoryRec(UpdateInstanceRec):
-    title: str
-    rars: str
+    title: str | None
+    rars: str | None
     
     @validator("title")
     def validate_title(cls, value):
@@ -51,6 +52,10 @@ class UpdateCategoryRec(UpdateInstanceRec):
         return value
 
 # resp
-class GetCategoryByIdResp(GetInstanceByIdResp):
+class ShowCategoryResp(ShowInstanceResp):
     title: str
-    rars: str
+    rars: str | None
+    
+class ShowCategoryRespWF(TunedModel):
+    instances: list[ShowCategoryResp]
+    not_found_ids: list[uuid.UUID]

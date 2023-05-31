@@ -1,6 +1,6 @@
 import uuid
 from app.api.schemas.moderation.base import (CreateInstanceRec,
-                                             GetInstanceByIdResp,
+                                             ShowInstanceResp,
                                              UpdateInstanceRec)
 
 #rec
@@ -13,6 +13,6 @@ class UpdateProductToCategoryRec(UpdateInstanceRec):
     category_id: uuid.UUID
 
 # resp
-class GetProductToCategoryByIdResp(GetInstanceByIdResp):
+class GetProductToCategoryByIdResp(ShowInstanceResp):
     product_id: uuid.UUID
     category_id: uuid.UUID

@@ -1,6 +1,7 @@
 
 import uuid
 from app.api.schemas.base_tuned_model import TunedModel
+from datetime import datetime
 
 class CreateInstanceRec(TunedModel): #base
     pass
@@ -9,36 +10,28 @@ class UpdateInstanceRec(TunedModel): #base
     id: uuid.UUID
 
 class DeleteInstanceRec(TunedModel):
-    id: uuid.UUID
+    ids: list[uuid.UUID]
 
-class GetInstanceByIdRec(TunedModel):
-    id: uuid.UUID
+class ShowInstanceRec(TunedModel):
+    ids: list[uuid.UUID]
 
 
 
 class CreateInstanceResp(TunedModel):
-    created_instances_ids: list[uuid.UUID]
+    created_ids: list[uuid.UUID]
 
 class UpdateInstanceResp(TunedModel):
-    updated_instances_ids: list[uuid.UUID]
+    updated_ids: list[uuid.UUID]
+    not_found_ids: list[uuid.UUID]
 
 class DeleteInstanceResp(TunedModel):
-    deleted_instance_id: uuid.UUID
+    deleted_ids: list[uuid.UUID]
+    not_found_ids: list[uuid.UUID]
     
-class GetInstanceByIdResp(TunedModel): #base
+class ShowInstanceResp(TunedModel): #base
     id: uuid.UUID
-    
-    
-    
+    created_at: datetime
+    edited_at: datetime
     
 
-# CreateInstanceRec,
-# CreateInstanceResp,
-# DeleteInstanceRec,
-# DeleteInstanceResp,
-# GetInstanceByIdRec,
-# GetInstanceByIdResp,
-# TitleValidationMixin,
-# UpdateInstanceRec,
-# UpdateInstanceResp
     
