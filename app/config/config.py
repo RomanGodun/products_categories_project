@@ -1,12 +1,9 @@
 import os
 import sys
-import traceback
-import pydantic
-from datetime import datetime, timedelta
-from functools import wraps
 from pathlib import Path
-from typing import Optional, Any
+from typing import Any, Optional
 
+import pydantic
 from dotenv import dotenv_values
 from loguru import logger as base_logger
 
@@ -15,27 +12,22 @@ def get_env_dict(env_dir: Optional[Path]):
     env_shared = dotenv_values(str(env_dir / "shared.env"))
     env_secret = dotenv_values(str(env_dir / "secret.env"))
     env_dict = {**env_shared, **env_secret, **os.environ}
-    env_dict = {
-        k: v
-        for k, v in env_dict.items()
-        if ("<secret>" not in v) or ("<project>" not in v)
-    }
+    env_dict = {k: v for k, v in env_dict.items() if ("<secret>" not in v) or ("<project>" not in v)}
     return env_dict
 
 
-            
-def get_db_url(env_dict: dict[str, Any], is_asnc:bool = True) -> str:
-    
+def get_db_url(env_dict: dict[str, Any], is_asnc: bool = True) -> str:
+
     use_global = pydantic.parse_obj_as(bool, env_dict.get("USE_GLOBAL", "True"))
-    
+
     prefix = "postgresql+asyncpg" if is_asnc else "postgresql"
-    user = env_dict.get('DB_USER')
-    password = env_dict.get('DB_PASSWORD')
-    host = env_dict.get('DB_HOST_GLOBAL') if use_global else env_dict.get('DB_HOST_LOCAL')
-    port = env_dict.get('DB_PORT')
-    db_name = env_dict.get('DB_NAME')
-    
-    return f"{prefix}://{user}:{password}@{host}:{port}/{db_name}"   
+    user = env_dict.get("DB_USER")
+    password = env_dict.get("DB_PASSWORD")
+    host = env_dict.get("DB_HOST_GLOBAL") if use_global else env_dict.get("DB_HOST_LOCAL")
+    port = env_dict.get("DB_PORT")
+    db_name = env_dict.get("DB_NAME")
+
+    return f"{prefix}://{user}:{password}@{host}:{port}/{db_name}"
 
 
 class Rotator:
@@ -49,9 +41,7 @@ class Rotator:
         return False
 
 
-def get_logger(
-    logging_level: str, log_dir: Optional[Path] = None, logging_dir_level: str = "DEBUG"
-):
+def get_logger(logging_level: str, log_dir: Optional[Path] = None, logging_dir_level: str = "DEBUG"):
     base_logger.remove()
     base_logger.add(sys.stderr, level=logging_level)
 
@@ -75,7 +65,5 @@ db_url_alembic = get_db_url(env_dict, is_asnc=False)
 logger = get_logger(
     logging_level=env_dict.get("LOGGING_LEVEL", "INFO"),
     log_dir=Path(env_dict.get("LOG_DIR")) if env_dict.get("LOG_DIR") else None,
-    logging_dir_level=env_dict.get("LOGGING_DIR_LEVEL","DEBUG"),
+    logging_dir_level=env_dict.get("LOGGING_DIR_LEVEL", "DEBUG"),
 )
-
-

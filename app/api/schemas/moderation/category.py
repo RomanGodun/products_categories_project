@@ -1,19 +1,20 @@
 import uuid
 
+from fastapi import HTTPException
+from pydantic import validator
+
 from app.api.schemas.moderation.base import (
     CreateInstanceRec,
     ShowInstanceResp,
     UpdateInstanceRec,
 )
 from app.api.schemas.tuned_model import TunedModel
-from fastapi import HTTPException
-from pydantic import validator
+from app.database.models.buisiness_entities import RARS
 
 
-class CreateProductRec(CreateInstanceRec):
+class CreateCategoryRec(CreateInstanceRec):
     title: str
-    flammable: bool
-    price: int
+    rars: str | None
 
     @validator("title")
     def validate_title(cls, value):
@@ -21,17 +22,16 @@ class CreateProductRec(CreateInstanceRec):
             raise HTTPException(status_code=422, detail="The title must be less than 100 characters and more than 1")
         return value
 
-    @validator("price")
-    def validate_name(cls, value):
-        if value < 0:
-            raise HTTPException(status_code=422, detail="Price must be more than 0")
+    @validator("rars")
+    def validate_rars(cls, value):
+        if value not in RARS:
+            raise HTTPException(status_code=422, detail=f"The rars value must be in {RARS}")
         return value
 
 
-class UpdateProductRec(UpdateInstanceRec):
+class UpdateCategoryRec(UpdateInstanceRec):
     title: str | None
-    flammable: bool | None
-    price: int | None
+    rars: str | None
 
     @validator("title")
     def validate_title(cls, value):
@@ -39,20 +39,19 @@ class UpdateProductRec(UpdateInstanceRec):
             raise HTTPException(status_code=422, detail="The title must be less than 100 characters and more than 1")
         return value
 
-    @validator("price")
-    def validate_name(cls, value):
-        if value < 0:
-            raise HTTPException(status_code=422, detail="Price must be more than 0")
+    @validator("rars")
+    def validate_rars(cls, value):
+        if value not in RARS:
+            raise HTTPException(status_code=422, detail=f"The rars value must be in {RARS}")
         return value
 
 
 # resp
-class ShowProductResp(ShowInstanceResp):
+class ShowCategoryResp(ShowInstanceResp):
     title: str
-    flammable: bool
-    price: int
+    rars: str | None
 
 
-class ShowProductRespWF(TunedModel):
-    instances: list[ShowProductResp]
+class ShowCategoryRespWF(TunedModel):
+    instances: list[ShowCategoryResp]
     not_found_ids: list[uuid.UUID]

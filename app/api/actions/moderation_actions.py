@@ -1,5 +1,8 @@
 from uuid import UUID
 
+from pydantic import BaseModel
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.api.schemas.moderation.base import (
     CreateInstanceResp,
     DeleteInstanceResp,
@@ -7,16 +10,19 @@ from app.api.schemas.moderation.base import (
 )
 from app.api.schemas.moderation.category import ShowCategoryResp, ShowCategoryRespWF
 from app.api.schemas.moderation.product import ShowProductResp, ShowProductRespWF
+from app.api.schemas.moderation.product_to_category import (
+    ShowProductToCategoryResp,
+    ShowProductToCategoryRespWF,
+)
 from app.config.config import logger
 from app.database.dals.base_model_dal import BaseModelDAL
 from app.database.models.base import Base
-from app.database.models.buisiness_entities import Category, Product
-from pydantic import BaseModel
-from sqlalchemy.ext.asyncio import AsyncSession
+from app.database.models.buisiness_entities import Category, Product, ProductToCategory
 
 MATCHING_MODELS_SHEMES = {
     Category: {"show_resp": ShowCategoryResp, "show_resp_wf": ShowCategoryRespWF},
     Product: {"show_resp": ShowProductResp, "show_resp_wf": ShowProductRespWF},
+    ProductToCategory: {"show_resp": ShowProductToCategoryResp, "show_resp_wf": ShowProductToCategoryRespWF},
 }
 
 
