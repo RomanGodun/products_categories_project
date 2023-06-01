@@ -1,10 +1,48 @@
-# products_categories_project
-test task for the interview
+# Апи для работы с продуктами и категориями
 
+Оcновные бизнес функции:
 ![image](https://user-images.githubusercontent.com/40138357/199266070-225d8a3b-d2b5-45ec-a483-8ff4203b583a.png)
 
-The project contains a docker-compose.yaml file that allows you to deploy the system from two containers. The first container is a postgreSQL database, which is initialized with test data in the init.sql script. The second container implements a service based on HTTP API library FastAPI and ORM SQLalchemy. The code is implemented in asynchronous style.
+Описание:
+Основная цель проекта это создание личной кодовой базы. Для этого проекта была взята небольшая задача, которою я планирую расширять и дополнять
 
-When deploying containers in the project folder creates a folder /logs, which contains the execution logs and the folder /pd_data, which implements persistence
+## Roadmap:
 
-Access to the service is via port 5050 on localhost
+MVP
+- [x] docker-compouse - Dokerfile 
+- [x] Развертывание бд - PostgreSQL 
+- [x] Модели, запросы -  SQLalchemy 
+- [x] api - FastApi
+
+
+Модерация таблиц:
+- [x] Обновление моделей под v.2, 
+- [x] Base модель, 
+- [x] Миграции alembic
+- [X] Base data acess level
+- [X] Base actions
+- [X] Handlers
+- [ ] Тесты модерации
+
+Система пользователей:
+- [ ] Пользовтели
+- [ ] Аутентефикция
+- [ ] Токены
+- [ ] Роли 
+- [ ] Тесты системы пользовтелей
+
+Сбор метрик:
+- [ ] Prometheus
+- [ ] Тест сбора метрик
+
+Кэширование:
+- [ ] Radis
+- [ ] Тест кэширования
+
+Деплой:
+ - [ ] Пайлайн сборки
+ - [ ] K8 на удаленном сервре
+ - [ ] Тесты деплоя
+
+Фронтенд:
+ - [ ] Plotly, Streamlit
