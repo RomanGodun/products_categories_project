@@ -1,0 +1,11 @@
+__pycache__/
+pgdata/
+dev/
+logs/
+migrations/
+.gitignore
+.git
+*.swp
+.flake8
+.pre-commit-config.yaml
+.README.md

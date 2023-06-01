@@ -59,10 +59,10 @@ services:
           memory: 4G
 
   product_service:
-    image: prod_cat_image
+    image: prod_category_image
     container_name: product_container
     build:
-      context: ./prod_cat
+      context: .
       dockerfile: Dockerfile
     ports:
       - "5050:8000"

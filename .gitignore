@@ -1,4 +1,5 @@
 pgdata
+logs
 # DotEnv configuration
 .env
 #secret.env

@@ -16,8 +16,8 @@ from app.database.models.buisiness_entities import Category, Product, ProductToC
 async def select_product_categories_(session: AsyncSession) -> List[ProductsSchema]:
     sel = (
         select(Product.title.label("product"), func.array_agg(Category.title).label("categories"))
-        .join_from(Product, ProductToCategory)
-        .join(Category)
+        .join_from(Product, ProductToCategory, isouter=True)
+        .join(Category, isouter=True)
         .group_by(Product.id)
         .order_by(Product.title)
     )
@@ -30,8 +30,8 @@ async def select_product_categories_(session: AsyncSession) -> List[ProductsSche
 async def select_category_products_(session: AsyncSession) -> List[CategoriesSchema]:
     sel = (
         select(Category.title.label("category"), func.array_agg(Product.title).label("products"))
-        .join_from(Category, ProductToCategory)
-        .join(Product)
+        .join_from(Category, ProductToCategory, isouter=True)
+        .join(Product, isouter=True)
         .group_by(Category.id)
         .order_by(Category.title)
     )

@@ -6,9 +6,9 @@ COPY requirements requirements
 RUN pip install -r requirements/requirements.txt
 
 #std.err log level
-ARG LOGGING_LEVEL="DEBUG"
+ARG LOGGING_LEVEL="INFO"
 #file log level
-ARG LOGGING_DIR_LEVEL="DEBUG"
+ARG LOGGING_DIR_LEVEL="INFO"
 #folder for file logs
 ARG LOG_DIR="logs"
 ARG TZ=Europe/Moscow
@@ -25,4 +25,4 @@ COPY app app
 COPY setup.py setup.py
 RUN pip install -e .
 
-CMD ["uvicorn", "app.api.main:app","--host","0.0.0.0"]
+CMD ["uvicorn", "app.main:app","--host","0.0.0.0"]

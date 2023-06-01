@@ -3,7 +3,6 @@ import sys
 from pathlib import Path
 from typing import Any, Optional
 
-import pydantic
 from dotenv import dotenv_values
 from loguru import logger as base_logger
 
@@ -16,14 +15,12 @@ def get_env_dict(env_dir: Optional[Path]):
     return env_dict
 
 
-def get_db_url(env_dict: dict[str, Any], is_asnc: bool = True) -> str:
-
-    use_global = pydantic.parse_obj_as(bool, env_dict.get("USE_GLOBAL", "True"))
+def get_db_url(env_dict: dict[str, Any], is_asnc: bool = True, is_global: bool = True) -> str:
 
     prefix = "postgresql+asyncpg" if is_asnc else "postgresql"
     user = env_dict.get("DB_USER")
     password = env_dict.get("DB_PASSWORD")
-    host = env_dict.get("DB_HOST_GLOBAL") if use_global else env_dict.get("DB_HOST_LOCAL")
+    host = env_dict.get("DB_HOST_GLOBAL") if is_global else env_dict.get("DB_HOST_LOCAL")
     port = env_dict.get("DB_PORT")
     db_name = env_dict.get("DB_NAME")
 
@@ -60,7 +57,7 @@ def get_logger(logging_level: str, log_dir: Optional[Path] = None, logging_dir_l
 env_dict = get_env_dict(Path(__file__).parents[0])
 
 db_url = get_db_url(env_dict)
-db_url_alembic = get_db_url(env_dict, is_asnc=False)
+db_url_alembic = get_db_url(env_dict, is_asnc=False, is_global=False)
 
 logger = get_logger(
     logging_level=env_dict.get("LOGGING_LEVEL", "INFO"),
