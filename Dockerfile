@@ -3,7 +3,7 @@ FROM python:3.10
 WORKDIR /
 
 COPY requirements requirements
-RUN pip install -r requirements/requirements.txt
+RUN pip install -r requirements/service.txt
 
 #std.err log level
 ARG LOGGING_LEVEL="INFO"

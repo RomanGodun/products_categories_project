@@ -1,8 +1,11 @@
 __pycache__/
+app.egg-info/
+
 pgdata/
 dev/
 logs/
 migrations/
+
 .gitignore
 .git
 *.swp
