@@ -39,7 +39,6 @@ services:
       PGDATA: "/var/lib/postgresql/data/pgdata"
     container_name: postgres
     volumes:
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
       - .:/var/lib/postgresql/data
     ports:
       - "5432:5432"
