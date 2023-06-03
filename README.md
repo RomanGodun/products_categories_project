@@ -2,7 +2,7 @@
 
 ## Основные бизнес функции:
 
-![image](https://user-images.githubusercontent.com/40138357/199266070-225d8a3b-d2b5-45ec-a483-8ff4203b583a.png)
+![image](https://github.com/RomanGodun/products_categories_project/assets/40138357/aae53384-c0b4-46c8-b567-97c6634a8c8e)
 
 ## Описание:
 
