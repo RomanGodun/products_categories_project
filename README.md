@@ -6,9 +6,20 @@
 
 ## Описание:
 
-API-сервис на **FastApi**, **SQLalchemy**, **Postgres**
+API-сервис на **FastApi**, **SQLalchemy**, **Postgres**, **Docker**, **docker-compose**
 
 Для этого проекта была взята небольшая задача, которою я планирую расширять и дополнять. Основная цель - создание личной кодовой базы
+
+## Где можно посмотреть код:
+
+- Докер - _Dockerfile_ и _docker-compose.yaml_
+- Модели SQLalchemy - _app/database/models/buisiness_entities.py_ и _app/database/models/base.py_
+- Настройка алембика - _migrations/env.py_
+- Функции взаимодейсствия с бд - _app/database/dals/base_model_dal.py_ и app/database/dals/base_dal.py
+- Экшены для модерации таблиц и бизнес функциональности - _app/api/actions_
+- Схемы для модерации таблиц и бизнес функциональности  - _app/api/schemas_
+- Хэндлеры для модерации таблиц и бизнес функциональности - _app/api/handlers_
+</br>
 
 ## Внимание! 
 Это личный проект поэтому для удобства пароль от бд находится в открытом доступе в репозитории. **Этот пароль скомпрометирован - рекомендую сменить его!**
@@ -29,7 +40,7 @@ bash init.py
 ```shell
 sudo service docker start
 ```
-Билдим образы бд и api-сервиса:
+Билдим образы бд и api-сервис:
 ```shell
 sudo docker compose build
 ```
@@ -40,6 +51,10 @@ sudo docker compose up -d --force-recreate
 Устанавливаем пакет с кодом проекта в интерпретатор python:
 ```shell
 pip install -e .
+```
+Устанавливаем библиотеки для работы алембика в интерпретатор python:
+```shell
+pip install -r requirements/alembic.txt
 ```
 Накатываем миграции на базу данных:
 ```shell
