@@ -1,80 +1,36 @@
-from pydantic import BaseModel
+from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
-from fastapi import Depends
-from sqlalchemy.ext.asyncio import AsyncSession
-from pydantic import BaseModel
-from base import get_session
-import service
-from initlog import getСustomLogger
-import os
+from fastapi import APIRouter, FastAPI
+
+from app.api.handlers.business_funcs import business_funcs_router
+from app.api.handlers.moderation.category import category_router
+from app.api.handlers.moderation.product import product_router
+from app.api.handlers.moderation.product_to_category import product_to_category_router
+from app.database.session_utils import connect, disconnect
 
 
-logger = getСustomLogger(
-    servicename="product_service",
-    filepath="/var/log/product_service/product_service.log",
-    levelG=int(os.environ["LOG_G"]),
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    connect()
+    yield
+    disconnect()
+
+
+app = FastAPI(lifespan=lifespan)
+
+# create the instance for the routes
+main_api_router = APIRouter()
+moderation_router = APIRouter()
+
+# set routes to the app instance
+
+moderation_router.include_router(category_router, prefix="/category", tags=["category"])
+moderation_router.include_router(product_router, prefix="/product", tags=["product"])
+moderation_router.include_router(
+    product_to_category_router, prefix="/product_to_category", tags=["product_to_category"]
 )
 
-app = FastAPI()
+main_api_router.include_router(business_funcs_router, prefix="/business_funcs", tags=["business_funcs"])
+main_api_router.include_router(moderation_router, prefix="/moderation", tags=["moderation"])
 
-
-class ProductsSchema(BaseModel):
-    product: str
-    categories: str | None
-
-
-class CategoriesSchema(BaseModel):
-    category: str
-    products: str | None
-
-
-class ProductsCategoriesSchema(BaseModel):
-    product: str
-    category: str
-
-
-@app.get("/products", response_model=list[ProductsSchema])
-async def get_products(session: AsyncSession = Depends(get_session)):
-    try:
-        products = await service.get_products(session)
-        logger.debug(f"{products}")
-        result = [
-            ProductsSchema(product=p.product, categories=p.categories) for p in products
-        ]
-        logger.info("products with categories have been successfully received")
-    except:
-        logger.exception(f"/products was failed")
-    return result
-
-
-@app.get("/categories", response_model=list[CategoriesSchema])
-async def get_categories(session: AsyncSession = Depends(get_session)):
-    try:
-        categories = await service.get_categories(session)
-        logger.debug(f"{categories}")
-        result = [
-            CategoriesSchema(category=c.category, products=c.products)
-            for c in categories
-        ]
-        logger.info("categories with products have been successfully received")
-    except:
-        logger.exception(f"/categories was failed")
-
-    return result
-
-
-@app.get("/product_categories", response_model=list[ProductsCategoriesSchema])
-async def get_products_categories(session: AsyncSession = Depends(get_session)):
-    try:
-        product_categories = await service.get_products_categories(session)
-        logger.debug(f"{product_categories}")
-        result = [
-            ProductsCategoriesSchema(product=pc.product, category=pc.category)
-            for pc in product_categories
-        ]
-        logger.info("list of product-category have been successfully received")
-    except:
-        logger.exception(f"/product_categories was failed")
-
-    return result
+app.include_router(main_api_router)

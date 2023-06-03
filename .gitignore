@@ -1,3 +1,10 @@
+pgdata
+logs
+# DotEnv configuration
+.env
+init.sql/
+#secret.env
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

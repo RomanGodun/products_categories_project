@@ -34,17 +34,16 @@ services:
       - "pg_stat_statements.track=all"
     environment:
       POSTGRES_DB: "postgres_db"
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_USER: "postgres_user"
+      POSTGRES_PASSWORD: "Postgres123"
       PGDATA: "/var/lib/postgresql/data/pgdata"
     container_name: postgres
     volumes:
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
       - .:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres_db"]
+      test: ["CMD-SHELL", "pg_isready -U postgres_user -d postgres_db"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -59,15 +58,16 @@ services:
           memory: 4G
 
   product_service:
+    image: prod_category_image
     container_name: product_container
     build:
-      context: ./app
+      context: .
       dockerfile: Dockerfile
     ports:
       - "5050:8000"
     restart: unless-stopped
     volumes:
-      - ./logs:/var/log/product_service/
+      - ./logs:/logs
     deploy:
       resources:
         limits:

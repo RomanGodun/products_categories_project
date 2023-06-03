@@ -1,0 +1,5 @@
+alembic revision --autogenerate -m "init_m
+
+alembic upgrade heads
+
+alembic downgrade -1

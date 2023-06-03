@@ -1,0 +1,14 @@
+__pycache__/
+app.egg-info/
+
+pgdata/
+dev/
+logs/
+migrations/
+
+.gitignore
+.git
+*.swp
+.flake8
+.pre-commit-config.yaml
+.README.md
